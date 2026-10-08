@@ -84,6 +84,45 @@ func main() {
 
 There is a `canned` package that can be used for common features such as reading controller fault codes or the status of forces. Look at the `/examples/Canned` directory to see how to use these. You can also use the code in `/canned/` as good examples of how to do particular things. Pull requests for extensions to the `canned` package are welcome (as are all pull requests).
 
+### Supported Data Types
+
+The following table lists the known CIP/Logix data types and the Go type each one maps to when reading (or that you should use when writing).
+
+| CIP Type | Code | Go Type | Notes |
+|---|---|---|---|
+| BOOL | 0xC1 | `bool` | |
+| SINT | 0xC2 | `int8` | |
+| INT | 0xC3 | `int16` | |
+| DINT | 0xC4 | `int32` | |
+| LINT | 0xC5 | `int64` | |
+| USINT | 0xC6 | `byte`/`uint8` | |
+| UINT | 0xC7 | `uint16` | |
+| UDINT | 0xC8 | `uint32` | |
+| ULINT | 0xC9 | `uint64` | |
+| REAL | 0xCA | `float32` | |
+| LREAL | 0xCB | `float64` | |
+| UTIME | 0xC0 | `int64` | microseconds |
+| STIME | 0xCC | `int32` | milliseconds |
+| DATE | 0xCD | `uint16` | days since 1970-01-01 |
+| TIME_OF_DAY | 0xCE | `[6]byte` | 4 bytes ns-of-day + 2 byte date |
+| DATE_AND_TIME | 0xCF | `int64` | microseconds since 1970-01-01 |
+| FTIME | 0xD6 | `int32` | milliseconds |
+| LTIME | 0xD7 | `int64` | microseconds |
+| ITIME | 0xD8 | `int32` | milliseconds |
+| TIME | 0xDB | `int32` | milliseconds since midnight |
+| STRINGI | 0xD0 | `[]byte` | 32-bit length prefix + chars |
+| STRING2 | 0xD5 | `[]byte` | 32-bit length prefix + chars |
+| STRINGN | 0xD9 | `[]byte` | 32-bit length prefix + chars |
+| SHORT_STRING | 0xDA | `[]byte` | 8-bit length prefix + chars |
+| BYTE | 0xD1 | `byte` | 8 packed bits |
+| WORD | 0xD2 | `uint16` | |
+| DWORD | 0xD3 | `uint32` | |
+| LWORD | 0xD4 | `uint64` | |
+| EPATH | 0xDC | `[]byte` | word-count prefixed CIP path |
+| ENGUNIT | 0xDD | `uint16` | engineering unit code |
+| STRING | 0xFF (gologix) | `string` | Logix STRING struct (comes across as 0xA0 struct) |
+| Struct/UDT | 0xA0 | struct | user defined types, timers, counters, etc. |
+
 ### L5X File Support
 
 The `l5x` package provides support for working with RSLogix5000 L5X export files. This allows you to parse project files exported from Studio 5000 to extract tag information, UDT definitions, and program structure without needing a live connection to the PLC.
